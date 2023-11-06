@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: > 
+  This is the default AWS IAM Role for Glue services
+Resources:
+  GlueDefaultRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: AWSGlueDefaultRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - glue.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+Outputs:
+  GlueDefaultRoleOutput:
+    Description: ARN of the default glue role
+    Value: !GetAtt GlueDefaultRole.Arn
+    Export: 
+      Name: !Sub "${AWS::StackName}-GlueDefaultRoleArn"

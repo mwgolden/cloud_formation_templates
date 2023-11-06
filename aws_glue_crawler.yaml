@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: > 
+  This is a lab in the Data Lake in AWS Udemy course. 
+  We create an S3 bucket to store data, a role allowing the AWS Glue Crawler to access the S3 bucket,
+  a Glue Crawler, and a Glue Database.
+Parameters:
+  S3PathParameter:
+    Type: String
+    Description: 'Enter the S3 path for the Glue Crawler (e.g., s3://your-bucket-name/your-folder)'
+  GlueDatabaseNameParameter:
+    Type: String
+    Description: Enter the Glue database name
+  TablePrefixParameter:
+    Type: String
+    Description: "String value used to prefix Glue Tables"
+  GlueCrawlerNameParameter: 
+    Type: String
+    Description: Enter the name for the Glue Crawler
+Resources: 
+
+  GlueDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: !Ref GlueDatabaseNameParameter
+  
+  GlueCrawler: 
+    Type: AWS::Glue::Crawler
+    Properties: 
+      Name: !Ref GlueCrawlerNameParameter
+      Role: !ImportValue aws-glue-roles-GlueDefaultRoleArn
+      DatabaseName: !Ref GlueDatabase
+      Targets:
+        S3Targets: 
+          - Path: !Ref S3PathParameter
+      TablePrefix: !Ref TablePrefixParameter

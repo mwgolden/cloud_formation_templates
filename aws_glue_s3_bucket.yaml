@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: > 
+  Create S3 bucket seaparate from the glue crawler
+Resources: 
+  AWSGluebucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: aws-glue-com-wgolden
+Outputs:
+  BucketName:
+    Description: Bucket Name
+    Value: !Ref AWSGluebucket
+    Export: 
+      Name: !Sub "${AWS::StackName}-BucketName"
+      
